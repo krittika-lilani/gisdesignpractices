@@ -1,0 +1,46 @@
+# yaml-language-server: $schema=https://docs.maplibre-yaml.org/schema/latest/map.schema.json
+# Water hyacinth GBIF records (all dated cells, up to 2026). Shown on src/pages/india_map.astro.
+type: map
+id: india
+config:
+  mapStyle: "https://tiles.openfreemap.org/styles/fiord"
+  center: [82.5, 22.5] # [longitude, latitude]: India
+  zoom: 4
+
+layers:
+  - id: hyacinth
+    type: fill
+    source:
+      type: geojson
+      url: "/data/hyacinth_cells.geojson"
+    paint:
+      fill-color:
+        - interpolate
+        - [linear]
+        - [ln, [get, records]]
+        - 0
+        - "#7a62b8"
+        - 2.7
+        - "#a98fe0"
+        - 5.4
+        - "#d6c6f5"
+        - 8.1
+        - "#fbf6ff"
+      fill-opacity: 0.9
+      fill-outline-color: "#091710"
+    interactive:
+      hover:
+        cursor: pointer
+      click:
+        popup:
+          - h3:
+              - str: "Water hyacinth"
+          - p:
+              - property: records
+              - str: " GBIF records · "
+              - property: country
+          - p:
+              - str: "First recorded "
+              - property: first
+              - str: ", most recently "
+              - property: last
